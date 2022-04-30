@@ -1,0 +1,5 @@
+package authorization
+
+func ComposeAuthCode() {
+
+}
