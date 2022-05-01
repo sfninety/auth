@@ -21,19 +21,3 @@ type UserStore interface {
 type store struct {
 	db *sql.DB
 }
-
-func (s *store) GetUser(ctx context.Context, phoneNumber string) (*User, error) {
-	return nil, nil
-}
-
-func (s *store) NewUser(ctx context.Context, phoneNumber string, passwordHash string) (*User, error) {
-	return nil, nil
-}
-
-func (s *store) UpdateUser(ctx context.Context, user *User) error {
-	return nil
-}
-
-func (s *store) DeleteUser(ctx context.Context, phoneNumber string) error {
-	return nil
-}
