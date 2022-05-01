@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+option go_package = "github.com/sfninety/auth/ex/api";
+
+message PhoneNumberRequest {
+    string phone_number = 1;
+}

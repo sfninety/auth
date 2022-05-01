@@ -6,13 +6,15 @@ import (
 	"github.com/sfninety/auth/internal/datastore/jti"
 	"github.com/sfninety/auth/internal/datastore/token"
 	"github.com/sfninety/auth/internal/datastore/user"
+	"github.com/sfninety/auth/internal/datastore/verification"
 )
 
-type store struct {
-	Users  user.UserStore
-	Tokens token.TokenStore
-	Jtis   jti.JtiStore
-}
+var (
+	Users         user.UserStore
+	Tokens        token.TokenStore
+	Jtis          jti.JtiStore
+	Verifications verification.VerificationStore
+)
 
 type Config struct {
 	ConnectionString string
@@ -20,8 +22,6 @@ type Config struct {
 
 var (
 	cfg *Config
-
-	Store *store
 )
 
 // Init establishes a database connection
@@ -31,9 +31,8 @@ func Init() {
 		panic(err)
 	}
 
-	Store = &store{
-		Users:  user.Init(conn),
-		Jtis:   jti.Init(conn),
-		Tokens: token.Init(conn),
-	}
+	Users = user.Init(conn)
+	Jtis = jti.Init(conn)
+	Tokens = token.Init(conn)
+	Verifications = verification.Init(conn)
 }
