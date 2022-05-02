@@ -10,7 +10,6 @@ import (
 	"github.com/sfninety/auth/ex/api"
 	"github.com/sfninety/auth/internal/cryptography"
 	"github.com/sfninety/auth/internal/datastore"
-	"github.com/sfninety/auth/internal/datastore/verification"
 	"github.com/sfninety/auth/internal/httperrors"
 	"github.com/sfninety/iris"
 )
@@ -25,8 +24,8 @@ var (
 func Register(r iris.Request) iris.Response {
 	req := &api.PhoneNumberRequest{}
 	err := r.Decode(req)
-	if err != nil {
-		return r.ResponseWithCode("invalid request", 400)
+	if err != nil || req.PhoneNumber == "" {
+		return httperrors.BadRequest(r, "invalid request")
 	}
 
 	phoneNumber, err := parsePhoneNumber(req.PhoneNumber)
@@ -39,7 +38,11 @@ func Register(r iris.Request) iris.Response {
 	_, err = datastore.Users.GetUser(ctx, phoneNumber)
 	switch err {
 	case sql.ErrNoRows:
-		break
+		_, err = datastore.Users.NewUser(ctx, phoneNumber, "")
+		if err != nil {
+			log.Printf("failed to create new user: %v", err.Error())
+			return httperrors.Internal(r, err.Error())
+		}
 	case nil:
 		return httperrors.BadRequest(r, errUserAlreadyExists.Error())
 	default:
@@ -54,7 +57,6 @@ func Register(r iris.Request) iris.Response {
 	if err != nil {
 		log.Printf("failed to create new otp: %v", err.Error())
 		return httperrors.Internal(r, err.Error())
-
 	}
 
 	// TODO Send message through Kafka to notifications service to send a OTP text
@@ -62,11 +64,11 @@ func Register(r iris.Request) iris.Response {
 	return r.ResponseWithCode(nil, 200)
 }
 
-func RequestNewOTP(r iris.Request) iris.Response {
-	req := &api.PhoneNumberRequest{}
-	err := r.Decode(req)
-	if err != nil {
-		return r.ResponseWithCode("invalid request", 400)
+func FinishRegistration(r iris.Request) iris.Response {
+	req := api.RegistrationRequest{}
+	err := r.Decode(&req)
+	if err != nil || req.PhoneNumber == "" || req.Password == "" {
+		return httperrors.BadRequest(r, "invalid request")
 	}
 
 	phoneNumber, err := parsePhoneNumber(req.PhoneNumber)
@@ -76,36 +78,31 @@ func RequestNewOTP(r iris.Request) iris.Response {
 
 	ctx := r.Context
 
-	otp := cryptography.GenerateOTP(6)
-
-	_, err = datastore.Verifications.RetrieveVerificationPair(ctx, phoneNumber)
+	user, err := datastore.Users.GetUser(ctx, phoneNumber)
 	switch err {
-	case sql.ErrNoRows:
-		_, err = datastore.Verifications.StoreVerificationPair(ctx, phoneNumber, otp)
-		if err != nil {
-			log.Printf("failed to create new otp: %v", err.Error())
-			return httperrors.Internal(r, "failed to create new otp")
-		}
-		break
 	case nil:
-		err = datastore.Verifications.UpdateVerificationPair(ctx, verification.Verification{
-			PhoneNumber: phoneNumber,
-			OTP:         otp,
-		})
-		if err != nil {
-			log.Printf("failed to create new otp: %v", err.Error())
-			return httperrors.Internal(r, "failed to create new otp")
-		}
 		break
+	case sql.ErrNoRows:
+		return httperrors.BadRequest(r, "no user associated with phone number")
 	default:
-		log.Printf("failed to retrieve verification pair: %v", err.Error())
+		return httperrors.Internal(r, "failed to get user")
+	}
+
+	hashedPassword, err := cryptography.HashPassword(req.Password)
+	if err != nil {
+		log.Printf("failed to hash password: %v", err.Error())
 		return httperrors.Internal(r, err.Error())
 	}
 
-	// TODO send message to notification server to send OTP text
+	user.PasswordHash = hashedPassword
+	user.Onboarded = true
+
+	err = datastore.Users.UpdateUser(ctx, user)
+	if err != nil {
+		return httperrors.Internal(r, "failed to update user")
+	}
 
 	return r.ResponseWithCode(nil, 200)
-
 }
 
 func parsePhoneNumber(pn string) (string, error) {

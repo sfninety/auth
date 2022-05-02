@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.28.0
 // 	protoc        v3.19.4
-// source: authentication.proto
+// source: ex/api/authentication.proto
 
 package api
 
@@ -31,7 +31,7 @@ type PhoneNumberRequest struct {
 func (x *PhoneNumberRequest) Reset() {
 	*x = PhoneNumberRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_authentication_proto_msgTypes[0]
+		mi := &file_ex_api_authentication_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -44,7 +44,7 @@ func (x *PhoneNumberRequest) String() string {
 func (*PhoneNumberRequest) ProtoMessage() {}
 
 func (x *PhoneNumberRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_authentication_proto_msgTypes[0]
+	mi := &file_ex_api_authentication_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *PhoneNumberRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PhoneNumberRequest.ProtoReflect.Descriptor instead.
 func (*PhoneNumberRequest) Descriptor() ([]byte, []int) {
-	return file_authentication_proto_rawDescGZIP(), []int{0}
+	return file_ex_api_authentication_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *PhoneNumberRequest) GetPhoneNumber() string {
@@ -67,36 +67,168 @@ func (x *PhoneNumberRequest) GetPhoneNumber() string {
 	return ""
 }
 
-var File_authentication_proto protoreflect.FileDescriptor
+type VerifyOTPRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
 
-var file_authentication_proto_rawDesc = []byte{
-	0x0a, 0x14, 0x61, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x37, 0x0a, 0x12, 0x50, 0x68, 0x6f, 0x6e, 0x65, 0x4e,
-	0x75, 0x6d, 0x62, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x21, 0x0a, 0x0c,
-	0x70, 0x68, 0x6f, 0x6e, 0x65, 0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x0b, 0x70, 0x68, 0x6f, 0x6e, 0x65, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x42,
-	0x1a, 0x5a, 0x18, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x66,
-	0x6e, 0x69, 0x6e, 0x65, 0x74, 0x79, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	PhoneNumber string `protobuf:"bytes,1,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty"`
+	Otp         string `protobuf:"bytes,2,opt,name=otp,proto3" json:"otp,omitempty"`
+	Bing        string `protobuf:"bytes,3,opt,name=bing,proto3" json:"bing,omitempty"`
+}
+
+func (x *VerifyOTPRequest) Reset() {
+	*x = VerifyOTPRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_ex_api_authentication_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *VerifyOTPRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VerifyOTPRequest) ProtoMessage() {}
+
+func (x *VerifyOTPRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_ex_api_authentication_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VerifyOTPRequest.ProtoReflect.Descriptor instead.
+func (*VerifyOTPRequest) Descriptor() ([]byte, []int) {
+	return file_ex_api_authentication_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *VerifyOTPRequest) GetPhoneNumber() string {
+	if x != nil {
+		return x.PhoneNumber
+	}
+	return ""
+}
+
+func (x *VerifyOTPRequest) GetOtp() string {
+	if x != nil {
+		return x.Otp
+	}
+	return ""
+}
+
+func (x *VerifyOTPRequest) GetBing() string {
+	if x != nil {
+		return x.Bing
+	}
+	return ""
+}
+
+type RegistrationRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	PhoneNumber string `protobuf:"bytes,1,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty"`
+	Password    string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+}
+
+func (x *RegistrationRequest) Reset() {
+	*x = RegistrationRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_ex_api_authentication_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RegistrationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegistrationRequest) ProtoMessage() {}
+
+func (x *RegistrationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_ex_api_authentication_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegistrationRequest.ProtoReflect.Descriptor instead.
+func (*RegistrationRequest) Descriptor() ([]byte, []int) {
+	return file_ex_api_authentication_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *RegistrationRequest) GetPhoneNumber() string {
+	if x != nil {
+		return x.PhoneNumber
+	}
+	return ""
+}
+
+func (x *RegistrationRequest) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+var File_ex_api_authentication_proto protoreflect.FileDescriptor
+
+var file_ex_api_authentication_proto_rawDesc = []byte{
+	0x0a, 0x1b, 0x65, 0x78, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x65, 0x6e, 0x74,
+	0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x37, 0x0a,
+	0x12, 0x50, 0x68, 0x6f, 0x6e, 0x65, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x12, 0x21, 0x0a, 0x0c, 0x70, 0x68, 0x6f, 0x6e, 0x65, 0x5f, 0x6e, 0x75, 0x6d,
+	0x62, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x70, 0x68, 0x6f, 0x6e, 0x65,
+	0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x22, 0x5b, 0x0a, 0x10, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79,
+	0x4f, 0x54, 0x50, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x21, 0x0a, 0x0c, 0x70, 0x68,
+	0x6f, 0x6e, 0x65, 0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0b, 0x70, 0x68, 0x6f, 0x6e, 0x65, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x10, 0x0a,
+	0x03, 0x6f, 0x74, 0x70, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6f, 0x74, 0x70, 0x12,
+	0x12, 0x0a, 0x04, 0x62, 0x69, 0x6e, 0x67, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x62,
+	0x69, 0x6e, 0x67, 0x22, 0x54, 0x0a, 0x13, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x21, 0x0a, 0x0c, 0x70, 0x68,
+	0x6f, 0x6e, 0x65, 0x5f, 0x6e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0b, 0x70, 0x68, 0x6f, 0x6e, 0x65, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x1a, 0x0a,
+	0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x42, 0x21, 0x5a, 0x1f, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x73, 0x66, 0x6e, 0x69, 0x6e, 0x65, 0x74, 0x79,
+	0x2f, 0x61, 0x75, 0x74, 0x68, 0x2f, 0x65, 0x78, 0x2f, 0x61, 0x70, 0x69, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_authentication_proto_rawDescOnce sync.Once
-	file_authentication_proto_rawDescData = file_authentication_proto_rawDesc
+	file_ex_api_authentication_proto_rawDescOnce sync.Once
+	file_ex_api_authentication_proto_rawDescData = file_ex_api_authentication_proto_rawDesc
 )
 
-func file_authentication_proto_rawDescGZIP() []byte {
-	file_authentication_proto_rawDescOnce.Do(func() {
-		file_authentication_proto_rawDescData = protoimpl.X.CompressGZIP(file_authentication_proto_rawDescData)
+func file_ex_api_authentication_proto_rawDescGZIP() []byte {
+	file_ex_api_authentication_proto_rawDescOnce.Do(func() {
+		file_ex_api_authentication_proto_rawDescData = protoimpl.X.CompressGZIP(file_ex_api_authentication_proto_rawDescData)
 	})
-	return file_authentication_proto_rawDescData
+	return file_ex_api_authentication_proto_rawDescData
 }
 
-var file_authentication_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_authentication_proto_goTypes = []interface{}{
-	(*PhoneNumberRequest)(nil), // 0: PhoneNumberRequest
+var file_ex_api_authentication_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_ex_api_authentication_proto_goTypes = []interface{}{
+	(*PhoneNumberRequest)(nil),  // 0: PhoneNumberRequest
+	(*VerifyOTPRequest)(nil),    // 1: VerifyOTPRequest
+	(*RegistrationRequest)(nil), // 2: RegistrationRequest
 }
-var file_authentication_proto_depIdxs = []int32{
+var file_ex_api_authentication_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -104,14 +236,38 @@ var file_authentication_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_authentication_proto_init() }
-func file_authentication_proto_init() {
-	if File_authentication_proto != nil {
+func init() { file_ex_api_authentication_proto_init() }
+func file_ex_api_authentication_proto_init() {
+	if File_ex_api_authentication_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_authentication_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_ex_api_authentication_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PhoneNumberRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_ex_api_authentication_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*VerifyOTPRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_ex_api_authentication_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RegistrationRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -127,18 +283,18 @@ func file_authentication_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_authentication_proto_rawDesc,
+			RawDescriptor: file_ex_api_authentication_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_authentication_proto_goTypes,
-		DependencyIndexes: file_authentication_proto_depIdxs,
-		MessageInfos:      file_authentication_proto_msgTypes,
+		GoTypes:           file_ex_api_authentication_proto_goTypes,
+		DependencyIndexes: file_ex_api_authentication_proto_depIdxs,
+		MessageInfos:      file_ex_api_authentication_proto_msgTypes,
 	}.Build()
-	File_authentication_proto = out.File
-	file_authentication_proto_rawDesc = nil
-	file_authentication_proto_goTypes = nil
-	file_authentication_proto_depIdxs = nil
+	File_ex_api_authentication_proto = out.File
+	file_ex_api_authentication_proto_rawDesc = nil
+	file_ex_api_authentication_proto_goTypes = nil
+	file_ex_api_authentication_proto_depIdxs = nil
 }

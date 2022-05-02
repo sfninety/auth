@@ -7,6 +7,7 @@ type User struct {
 	PhoneNumber  string
 	PasswordHash string
 	Verified     bool
+	Onboarded    bool
 	Updated      time.Time
 	Created      time.Time
 }

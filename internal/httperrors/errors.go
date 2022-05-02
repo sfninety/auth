@@ -24,3 +24,10 @@ func Internal(r iris.Request, body string) iris.Response {
 		message: body,
 	}, http.StatusInternalServerError)
 }
+
+func InvalidOTP(r iris.Request, body string) iris.Response {
+	return r.ResponseWithCode(&errorResponseBody{
+		code:    http.StatusUnauthorized,
+		message: body,
+	}, http.StatusUnauthorized)
+}

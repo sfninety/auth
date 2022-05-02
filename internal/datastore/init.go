@@ -20,12 +20,8 @@ type Config struct {
 	ConnectionString string
 }
 
-var (
-	cfg *Config
-)
-
 // Init establishes a database connection
-func Init() {
+func Init(cfg *Config) {
 	conn, err := sql.Open("postgres", cfg.ConnectionString)
 	if err != nil {
 		panic(err)

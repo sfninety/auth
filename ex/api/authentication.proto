@@ -5,3 +5,14 @@ option go_package = "github.com/sfninety/auth/ex/api";
 message PhoneNumberRequest {
     string phone_number = 1;
 }
+
+message VerifyOTPRequest {
+    string phone_number = 1;
+    string otp = 2;
+    string bing = 3;
+}
+
+message RegistrationRequest {
+    string phone_number = 1;
+    string password = 2;
+}
