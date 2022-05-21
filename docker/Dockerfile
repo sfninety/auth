@@ -21,6 +21,14 @@ WORKDIR $GOPATH/src/service
 COPY . .
 COPY ./etc/config.yaml /etc/config.yaml
 
+# create ssh directory
+RUN mkdir ~/.ssh
+RUN touch ~/.ssh/known_hosts
+RUN ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
+# allow private repo pull
+RUN git config --global url."https://${{ secrets.AUTH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
 # Fetch dependencies
 RUN go get -d -v
 
