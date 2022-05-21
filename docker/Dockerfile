@@ -1,5 +1,9 @@
 FROM golang:alpine AS builder
 
+ARG auth_token
+
+ENV auth_token=$auth_token
+
 # Install git
 RUN apk update && apk add --no-cache git && apk add openssh
 
@@ -27,7 +31,7 @@ RUN touch ~/.ssh/known_hosts
 RUN ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
 # allow private repo pull
-RUN git config --global url."https://${{ secrets.AUTH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+RUN git config --global url."https://${auth_token}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
 # Fetch dependencies
 RUN go get -d -v
