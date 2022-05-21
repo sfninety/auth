@@ -1,7 +1,7 @@
 FROM golang:alpine AS builder
 
 # Install git
-RUN apk update && apk add --no-cache git
+RUN apk update && apk add --no-cache git && apk add openssh
 
 # Create user
 ENV USER=builduser
