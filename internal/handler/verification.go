@@ -82,7 +82,7 @@ func VerifyOTP(r iris.Request) iris.Response {
 	}
 
 	if v.OTP != req.Otp {
-		return httperrors.InvalidOTP(r, "otp does not match")
+		return httperrors.Unauthorized(r, "otp does not match")
 	}
 
 	err = datastore.Users.VerifyUser(ctx, phoneNumber)

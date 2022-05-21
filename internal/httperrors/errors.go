@@ -25,7 +25,7 @@ func Internal(r iris.Request, body string) iris.Response {
 	}, http.StatusInternalServerError)
 }
 
-func InvalidOTP(r iris.Request, body string) iris.Response {
+func Unauthorized(r iris.Request, body string) iris.Response {
 	return r.ResponseWithCode(&errorResponseBody{
 		code:    http.StatusUnauthorized,
 		message: body,

@@ -1,13 +1,18 @@
 package user
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type User struct {
-	Id           int32
-	PhoneNumber  string
-	PasswordHash string
-	Verified     bool
-	Onboarded    bool
-	Updated      time.Time
-	Created      time.Time
+	Id               uuid.UUID
+	PhoneNumber      string
+	PasswordHash     string
+	Verified         bool
+	Onboarded        bool
+	DeviceIdentifier string
+	Updated          time.Time
+	Created          time.Time
 }

@@ -1,5 +1,6 @@
 package authentication
 
 const (
-	accessTokenPrefix = "acctok_"
+	accessTokenPrefix  = "acctok_"
+	refreshTokenPrefix = "reftok_"
 )

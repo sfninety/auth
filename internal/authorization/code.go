@@ -1,5 +1,1 @@
 package authorization
-
-func ComposeAuthCode() {
-
-}
