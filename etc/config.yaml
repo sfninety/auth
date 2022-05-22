@@ -1,5 +1,5 @@
 datastore:
-  connection_string: {{connection_string}}
+  connection_string: dbtemplate
 
 handler:
   jwt_signing_key: sahfjksahjkfhasjk

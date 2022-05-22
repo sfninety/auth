@@ -22,6 +22,7 @@ jobs:
         username: sf90registry
         password: ${{ secrets.REGISTRY_KEY }}
         login-server: sf90registry.azurecr.io
+
         
 
     - uses: actions/checkout@v3
@@ -30,8 +31,13 @@ jobs:
         docker image prune -a --force
       
 
+
     - name: Build the Docker image
-      run: docker build . --file ./docker/Dockerfile --tag auth:latest --build-arg auth_token=${{ secrets.AUTH_TOKEN }} --build-arg db_connection_string=${{ env.DB_STRING }} --no-cache && docker tag auth:latest sf90registry.azurecr.io/services/auth && docker push sf90registry.azurecr.io/services/auth 
+      run: >
+        docker build --no-cache . --file ./docker/Dockerfile --tag auth:latest --build-arg auth_token=${{ secrets.AUTH_TOKEN }} --build-arg db_connection_string=${{ env.DB_STRING }}
 
+    - name: Tag the image
+      run: docker tag auth:latest sf90registry.azurecr.io/services/auth
 
-    
+    - name: Push the image to the repository
+      run: docker push sf90registry.azurecr.io/services/auth 
