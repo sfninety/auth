@@ -129,7 +129,7 @@ func FinishRegistration(r iris.Request) iris.Response {
 		}
 	}
 
-	atp, err := authentication.GenerateJwtPair(ctx, cfg.JwtSigningKey, user.DeviceIdentifier, user.PhoneNumber)
+	atp, err := authentication.GenerateJwtPair(ctx, cfg.Handler.JwtSigningKey, user.DeviceIdentifier, user.PhoneNumber)
 	if err != nil {
 		return httperrors.Internal(r, "failed to create access pair")
 	}

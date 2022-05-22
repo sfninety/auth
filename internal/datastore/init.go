@@ -17,11 +17,12 @@ var (
 )
 
 type Config struct {
-	ConnectionString string
+	ConnectionString string `yaml:"connection_string"`
 }
 
 // Init establishes a database connection
 func Init(cfg *Config) {
+
 	conn, err := sql.Open("postgres", cfg.ConnectionString)
 	if err != nil {
 		panic(err)

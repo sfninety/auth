@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ master ]
 
+
+env: 
+  DB_STRING: postgresql://service:${{ secrets.DB_KEY }}@free-tier7.aws-eu-west-1.cockroachlabs.cloud:26257/auth?sslmode=verify-full&options=--cluster%3Dsf90-cluster-2393
+
 jobs:
 
   login:
@@ -21,4 +25,8 @@ jobs:
 
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file ./docker/Dockerfile --tag auth:latest --build-arg auth_token=${{ secrets.AUTH_TOKEN }} && docker tag auth:latest sf90registry.azurecr.io/services/auth && docker push sf90registry.azurecr.io/services/auth 
+      run: >
+        docker build . --file ./docker/Dockerfile
+        --tag auth:latest --build-arg auth_token=${{ secrets.AUTH_TOKEN }} --build-arg db_connection_string=${{ env.DB_STRING }} &&
+        docker tag auth:latest sf90registry.azurecr.io/services/auth &&
+        docker push sf90registry.azurecr.io/services/auth 

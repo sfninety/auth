@@ -1,0 +1,5 @@
+datastore:
+  connection_string: {{connection_string}}
+
+handler:
+  jwt_signing_key: sahfjksahjkfhasjk

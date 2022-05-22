@@ -1,11 +1,13 @@
 FROM golang:alpine AS builder
 
 ARG auth_token
+ARG db_connection_string
 
 ENV auth_token=$auth_token
+ENV db_connection_string=$db_connection_string
 
 # Install git
-RUN apk update && apk add --no-cache git && apk add openssh
+RUN apk update && apk add --no-cache git && apk add openssh && apk add sed && apk add curl
 
 # Create user
 ENV USER=builduser
@@ -30,6 +32,10 @@ RUN mkdir ~/.ssh
 RUN touch ~/.ssh/known_hosts
 RUN ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
+RUN sed -i ".bak" "s/{{connection_string}}/${db_connection_string}/g" /etc/config.yaml
+
+RUN curl --create-dirs -o /etc/root.crt -O https://cockroachlabs.cloud/clusters/e437f606-804a-4bc6-bbc7-ba1470eb1dd4/cert
+
 # allow private repo pull
 RUN git config --global url."https://${auth_token}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
@@ -46,6 +52,7 @@ COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
 COPY --from=builder /etc/config.yaml /etc/config.yaml
 COPY --from=builder /go/bin/service /go/bin/service
+COPY --from=builder /etc/root.crt /.postgresql/root.crt 
 
 # Exec as an unprivileged user
 USER builduser:builduser
