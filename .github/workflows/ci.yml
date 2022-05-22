@@ -16,7 +16,7 @@ jobs:
       with:
         # Container registry username
         username: sf90registry
-        password: ${{ secrets.REGISTRY_TOKEN }}
+        password: ${{ secrets.REGISTRY_KEY }}
         login-server: sf90registry.azurecr.io
 
   build-image:
