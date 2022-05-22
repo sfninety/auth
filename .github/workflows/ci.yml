@@ -33,7 +33,6 @@ jobs:
 
 
     - name: Build the Docker image
-      run: docker build --no-cache . --file ./docker/Dockerfile --tag auth:latest --build-arg auth_token=${{ secrets.AUTH_TOKEN }} --build-arg db_connection_string=${{ env.DB_STRING }} && docker tag auth:latest sf90registry.azurecr.io/services/auth && docker push sf90registry.azurecr.io/services/auth 
-
+      run: docker build . --file ./docker/Dockerfile --tag auth:latest --build-arg auth_token=${{ secrets.AUTH_TOKEN }} && docker tag auth:latest sf90registry.azurecr.io/services/auth && docker push sf90registry.azurecr.io/services/auth 
 
     
