@@ -19,9 +19,6 @@ jobs:
         password: ${{ secrets.REGISTRY_KEY }}
         login-server: sf90registry.azurecr.io
 
-  build-image:
-    runs-on: ubuntu-latest
-    steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file ./docker/Dockerfile --tag auth:latest --build-arg auth_token=${{ secrets.AUTH_TOKEN }} && docker tag auth:latest sf90registry.azurecr.io/services/auth && docker push sf90registry.azurecr.io/services/auth 
+      run: docker build . --file ./docker/Dockerfile --tag auth:latest --build-arg auth_token=${{ secrets.AUTH_TOKEN }} && docker tag auth:$(date +%s) sf90registry.azurecr.io/services/auth && docker push sf90registry.azurecr.io/services/auth 
