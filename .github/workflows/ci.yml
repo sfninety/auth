@@ -1,4 +1,4 @@
-name: Login to Azure Registry
+name: Deploy
 
 on:
   push:
@@ -8,8 +8,7 @@ on:
 
 jobs:
 
-  build:
-
+  login:
     runs-on: ubuntu-latest
     steps:
     - name: Azure Container Registry Login
@@ -19,3 +18,10 @@ jobs:
         username: sf90registry
         password: ${{ secrets.REGISTRY_TOKEN }}
         login-server: sf90registry.azurecr.io
+
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file ./docker/Dockerfile --tag auth:$(date +%s) --build-arg auth_token=${{ secrets.AUTH_TOKEN }}
