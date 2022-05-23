@@ -3,6 +3,7 @@ package datastore
 import (
 	"database/sql"
 
+	_ "github.com/lib/pq"
 	"github.com/sfninety/auth/internal/datastore/jti"
 	"github.com/sfninety/auth/internal/datastore/token"
 	"github.com/sfninety/auth/internal/datastore/user"

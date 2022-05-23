@@ -38,14 +38,11 @@ RUN curl --create-dirs -o /etc/root.crt -O https://cockroachlabs.cloud/clusters/
 # allow private repo pull
 RUN git config --global url."https://${auth_token}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
-
-
 # Fetch dependencies
 RUN go get -d -v
 
-
+# Replace the templated database connection string
 RUN sed -ri "s#dbtemplate#'${db_connection_string}'#" /etc/config.yaml
-
 
 # Build
 RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /go/bin/service

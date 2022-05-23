@@ -22,7 +22,7 @@ type Config struct {
 var (
 	cfg *Config
 
-	config = flag.String("config", "/etc/config.yaml", "config file")
+	config = flag.String("config", "./etc/config.yaml", "config file")
 )
 
 func Init(router *iris.Router) {
@@ -43,9 +43,15 @@ func loadConfig() error {
 		return err
 	}
 
+	cfg = &Config{}
 	err = yaml.Unmarshal(b, cfg)
 	return err
 }
 
 func attachRoutes(router *iris.Router) {
+	router.GET("/health-check", healthCheck)
+}
+
+func healthCheck(r iris.Request) iris.Response {
+	return r.ResponseWithCode("OK", 200)
 }
