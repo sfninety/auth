@@ -32,15 +32,20 @@ RUN mkdir ~/.ssh
 RUN touch ~/.ssh/known_hosts
 RUN ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
-RUN sed -ri "s@dbtemplate@'${db_connection_string}'@" /etc/config.yaml
 
 RUN curl --create-dirs -o /etc/root.crt -O https://cockroachlabs.cloud/clusters/e437f606-804a-4bc6-bbc7-ba1470eb1dd4/cert
 
 # allow private repo pull
 RUN git config --global url."https://${auth_token}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
+
+
 # Fetch dependencies
 RUN go get -d -v
+
+
+RUN sed -ri "s#dbtemplate#'${db_connection_string}'#" /etc/config.yaml
+
 
 # Build
 RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /go/bin/service
