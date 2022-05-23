@@ -32,7 +32,7 @@ RUN mkdir ~/.ssh
 RUN touch ~/.ssh/known_hosts
 RUN ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
-RUN sed -ri "s@dbtemplate@'${db_connection_string}'@" ./etc/config.yaml
+RUN sed -ri "s@dbtemplate@'${db_connection_string}'@" /etc/config.yaml
 
 RUN curl --create-dirs -o /etc/root.crt -O https://cockroachlabs.cloud/clusters/e437f606-804a-4bc6-bbc7-ba1470eb1dd4/cert
 
