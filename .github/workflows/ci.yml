@@ -56,4 +56,4 @@ jobs:
       run: curl --create-dirs -o $HOME/.postgresql/root.crt -O https://cockroachlabs.cloud/clusters/${{ secrets.DB_CERT }}/cert
 
     - name: Migrations
-      run: docker run -v {{ migration dir }}:/migrations --network host migrate/migrate -path=/migrations/ -database ${{ env.DB_STRING }} up 2 
+      run: docker run -v $PWD/migrations:/migrations --network host migrate/migrate -path=/migrations/ -database '${{ env.DB_STRING }}' up
