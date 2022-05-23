@@ -9,10 +9,12 @@ on:
 
 env: 
   DB_STRING: postgresql://service:${{ secrets.DB_KEY }}@free-tier7.aws-eu-west-1.cockroachlabs.cloud:26257/auth?sslmode=verify-full&options=--cluster%3Dsf90-cluster-2393
+  MIGRATION_DB_STRING: cockroachdb://service:${{ secrets.DB_KEY }}@free-tier7.aws-eu-west-1.cockroachlabs.cloud:26257/auth?sslmode=verify-full&options=--cluster%3Dsf90-cluster-2393
+
 
 jobs:
 
-  login:
+  Test-and-deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Login to registry
@@ -56,4 +58,4 @@ jobs:
       run: curl --create-dirs -o $HOME/.postgresql/root.crt -O https://cockroachlabs.cloud/clusters/${{ secrets.DB_CERT }}/cert
 
     - name: Migrations
-      run: docker run -v $PWD/migrations:/migrations --network host migrate/migrate -path=/migrations/ -database '${{ env.DB_STRING }}' up
+      run: docker run -v $PWD/migrations:/migrations --network host migrate/migrate -path=/migrations/ -database '${{ env.MIGRATION_DB_STRING }}' up
