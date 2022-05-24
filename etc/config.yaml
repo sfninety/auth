@@ -2,4 +2,4 @@ datastore:
   connection_string: dbtemplate
 
 handler:
-  jwt_signing_key: sahfjksahjkfhasjk
+  jwt_signing_key: jwtsigningkeytemplate

@@ -44,9 +44,10 @@ jobs:
       run: >
         docker image prune -a --force
 
+      # Make the jwt_signing_key a template
     - name: Build the Docker image
       run: >
-        docker build --no-cache . --file ./docker/Dockerfile --tag auth:latest --build-arg auth_token=${{ secrets.AUTH_TOKEN }} --build-arg db_connection_string='${{ env.DB_STRING }}'
+        docker build --no-cache . --file ./docker/Dockerfile --tag auth:latest --build-arg auth_token=${{ secrets.AUTH_TOKEN }} --build-arg db_connection_string='${{ env.DB_STRING }}' --build-arg db_cert=${{ env.DB_CERT }} --build-arg jwt_signing_key=verysecurekey
 
     - name: Tag the image
       run: docker tag auth:latest sf90registry.azurecr.io/services/auth

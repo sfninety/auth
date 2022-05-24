@@ -16,3 +16,15 @@ CREATE TABLE IF NOT EXISTS verifications (
     otp TEXT NOT NULL,
     expiry TIMESTAMPTZ
 );
+
+CREATE TABLE IF NOT EXISTS tokens (
+    eb TEXT NOT NULL PRIMARY KEY,
+    sub UUID,
+    expiry TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS jtis (
+    value TEXT NOT NULL PRIMARY KEY,
+);
+
+

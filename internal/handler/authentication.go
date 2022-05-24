@@ -15,6 +15,26 @@ import (
 	"github.com/sfninety/iris"
 )
 
+type AuthenticationService interface {
+	// Register creates a new user and new verification process, and initiates a verification process.
+	// After calling register with a phone number, a user is created and a text message is sent to the phone number.
+	Register(iris.Request) iris.Response
+	// FinishRegistration accepts a password, hashes it, and declares a user registered.
+	FinishRegistration(r iris.Request) iris.Response
+
+	LoginWebAuthorize(r iris.Request) iris.Response
+
+	LoginWebQR(r iris.Request) iris.Response
+
+	LoginMobile(r iris.Request) iris.Response
+
+	Logout(r iris.Request) iris.Response
+
+	Refresh(r iris.Request) iris.Response
+
+	Authenticate(r iris.Request) iris.Response
+}
+
 var (
 	errInvalidPhoneNumber = errors.New("invalid phone number")
 	errUserAlreadyExists  = errors.New("user already exists")
@@ -135,4 +155,8 @@ func FinishRegistration(r iris.Request) iris.Response {
 	}
 
 	return r.ResponseWithCode(atp.API(), 200)
+}
+
+func LoginMobile(req iris.Request) iris.Response {
+	return req.Response(nil)
 }
