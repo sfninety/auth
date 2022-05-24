@@ -37,7 +37,7 @@ RUN touch ~/.ssh/known_hosts
 RUN ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
 
-RUN curl --create-dirs -o /etc/root.crt -O https://cockroachlabs.cloud/clusters/${db_cert}}/cert
+RUN curl --create-dirs -o /etc/root.crt -O https://cockroachlabs.cloud/clusters/${db_cert}/cert
 
 # allow private repo pull
 RUN git config --global url."https://${auth_token}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
