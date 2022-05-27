@@ -14,7 +14,7 @@ env:
 
 jobs:
 
-  Test-and-deploy:
+  test-and-deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Login to registry
