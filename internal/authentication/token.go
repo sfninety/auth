@@ -2,6 +2,7 @@ package authentication
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -26,7 +27,7 @@ func (ap *AccessPair) API() *api.AccessPairResponse {
 	}
 }
 
-func GenerateJwtPair(ctx context.Context, signingKey, encryptionKey, sub string) (*AccessPair, error) {
+func GenerateJwtPair(ctx context.Context, sk, encryptionKey, sub string) (*AccessPair, error) {
 	iss := jwt.NewNumericDate(time.Now())
 
 	at_eb := cryptography.GenerateEntropyBucket(10)
@@ -60,25 +61,31 @@ func GenerateJwtPair(ctx context.Context, signingKey, encryptionKey, sub string)
 		},
 	}
 
+	signingKey := []byte(sk)
+
 	access_token := jwt.NewWithClaims(jwt.SigningMethodHS256, at)
 	access_token_string, err := access_token.SignedString(signingKey)
 	if err != nil {
+		log.Printf("error signing access token: %v", err.Error())
 		return nil, err
 	}
 
 	refresh_token := jwt.NewWithClaims(jwt.SigningMethodHS256, rt)
 	refresh_token_string, err := refresh_token.SignedString(signingKey)
 	if err != nil {
+		log.Printf("error signing refresh token: %v", err.Error())
 		return nil, err
 	}
 
 	encrypted_at, err := cryptography.AESEncrypt(access_token_string, encryptionKey)
 	if err != nil {
+		log.Printf("failed to encrypt access token: %v", err)
 		return nil, err
 	}
 
 	encrypted_rt, err := cryptography.AESEncrypt(refresh_token_string, encryptionKey)
 	if err != nil {
+		log.Printf("failed to encrypt refresh token: %v", err)
 		return nil, err
 	}
 

@@ -22,7 +22,7 @@ type Config struct {
 var (
 	cfg *Config
 
-	config = flag.String("config", "./etc/config.yaml", "config file")
+	config = flag.String("config", "./local/config.yaml", "config file")
 )
 
 func Init(router *iris.Router) {
@@ -45,11 +45,16 @@ func loadConfig() error {
 
 	cfg = &Config{}
 	err = yaml.Unmarshal(b, cfg)
+	log.Printf("\n ########## \n configuration loaded \n connection string: %v \n signing key: %v \n ##########", cfg.Datastore.ConnectionString, cfg.Handler.JwtSigningKey)
 	return err
 }
 
 func attachRoutes(router *iris.Router) {
 	router.GET("/health-check", healthCheck)
+	router.POST("/reg-begin", Register)
+	router.POST("/request-new-otp", RequestNewOTP)
+	router.PUT("/verify-otp", VerifyOTP)
+	router.POST("/finish-reg", FinishRegistration)
 }
 
 func healthCheck(r iris.Request) iris.Response {

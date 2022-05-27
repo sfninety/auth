@@ -4,6 +4,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	crypto_rand "crypto/rand"
+	"encoding/base64"
 	"io"
 	"math/rand"
 
@@ -58,5 +59,9 @@ func AESEncrypt(text, key string) (string, error) {
 		return "", err
 	}
 
-	return string(gcm.Seal(nonce, nonce, []byte(text), nil)), nil
+	b64 := base64.StdEncoding.EncodeToString(gcm.Seal(nonce, nonce, []byte(text), nil))
+
+	return b64, nil
 }
+
+// TODO: decrypt token
