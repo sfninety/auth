@@ -58,7 +58,7 @@ jobs:
       run: docker tag auth:latest sf90registry.azurecr.io/services/auth:${{ github.sha }} 
 
     - name: push the image to the repository
-      run: docker push sf90registry.azurecr.io/services/auth
+      run: docker push sf90registry.azurecr.io/services/auth:${{ github.sha }}
 
     - name: get certs 
       run: curl --create-dirs -o $HOME/.postgresql/root.crt -O https://cockroachlabs.cloud/clusters/${{ secrets.DB_CERT }}/cert
