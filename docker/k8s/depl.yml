@@ -4,6 +4,7 @@ metadata:
   name: auth
   namespace: dev1
 spec:
+  imagePullPolicy: Always
   selector:
     matchLabels:
       app: auth
