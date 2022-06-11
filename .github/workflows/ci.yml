@@ -92,6 +92,9 @@ jobs:
         secret-name: ${{ secrets.AUTH_TOKEN }}
         namespace: ${{ env.NAMESPACE }}
         arguments: --force true
+        container-registry-url: sf90registry.azurecr.io
+        container-registry-username: sf90registry
+        container-registry-password: ${{ secrets.REGISTRY_KEY }}
 
     - uses: azure/k8s-deploy@v1
       with:
