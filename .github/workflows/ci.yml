@@ -1,4 +1,5 @@
 name: Deploy
+# TODO: make this better
 
 on:
   push:
