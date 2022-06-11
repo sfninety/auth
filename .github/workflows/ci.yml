@@ -65,11 +65,7 @@ jobs:
 
     - name: migrations
       run: docker run -v $PWD/migrations:/migrations --network host migrate/migrate -path=/migrations/ -database '${{ env.MIGRATION_DB_STRING }}' up
-  
-    
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
+
     
     - name: Checkout repository content
       uses: actions/checkout@v2
