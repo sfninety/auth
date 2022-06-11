@@ -2,15 +2,17 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: auth-svc-ingress
-  namespace: dev1
-  labels:
-    name: auth-svc-ingress
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
 spec:
   rules:
-    - host: auth-svc-ingress.071cb17d455f4048917f.eastus2.aksapp.io
-      http:
-        paths:
-        - path: /
-          backend:
-            serviceName: auth-svc
-            port: http
+  - host: auth-svc-ingress.071cb17d455f4048917f.eastus2.aksapp.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service: 
+            name: auth-svc
+            port: 
+              number: 80
