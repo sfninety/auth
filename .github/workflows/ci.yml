@@ -29,7 +29,7 @@ jobs:
         login-server: sf90registry.azurecr.io
 
     - uses: actions/checkout@v3
-    
+
     - name: set up Go
       uses: actions/setup-go@v3
       with:
@@ -78,8 +78,7 @@ jobs:
         resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
 
     - name: set namespace
-    - run: |
-        kubectl create namespace ${{ env.NAMESPACE }} --dry-run=client -o json | kubectl apply -f -
+    - run: kubectl create namespace ${{ env.NAMESPACE }} --dry-run=client -o json | kubectl apply -f -
     
     - name: login to registry
       uses: Azure/docker-login@v1
