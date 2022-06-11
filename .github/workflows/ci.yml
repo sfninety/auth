@@ -89,7 +89,7 @@ jobs:
 
     - uses: azure/k8s-create-secret@v1
       with:
-        secret-name: ${{ secrets.AUTH_TOKEN }}
+        secret-name: ${{ secrets.IMAGE_SECRET }}
         namespace: ${{ env.NAMESPACE }}
         arguments: --force true
         container-registry-url: sf90registry.azurecr.io
