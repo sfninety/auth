@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: auth-svc-ingress
+  namespace: dev1
   labels:
     name: auth-svc-ingress
 spec:
@@ -9,8 +10,7 @@ spec:
     - host: auth-svc-ingress.071cb17d455f4048917f.eastus2.aksapp.io
       http:
         paths:
-        - path: "/"
-          pathType: Prefix
+        - path: /
           backend:
             serviceName: auth-svc
             port: http
