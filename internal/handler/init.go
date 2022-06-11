@@ -22,7 +22,7 @@ type Config struct {
 var (
 	cfg *Config
 
-	config = flag.String("config", "./local/config.yaml", "config file")
+	config = flag.String("config", "etc/config.yaml", "config file")
 )
 
 func Init(router *iris.Router) {
