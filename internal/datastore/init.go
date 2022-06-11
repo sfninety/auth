@@ -3,6 +3,7 @@ package datastore
 import (
 	"database/sql"
 
+	_ "github.com/lib/pq"
 	"github.com/sfninety/auth/internal/datastore/jti"
 	"github.com/sfninety/auth/internal/datastore/token"
 	"github.com/sfninety/auth/internal/datastore/user"
@@ -17,11 +18,12 @@ var (
 )
 
 type Config struct {
-	ConnectionString string
+	ConnectionString string `yaml:"connection_string"`
 }
 
 // Init establishes a database connection
 func Init(cfg *Config) {
+
 	conn, err := sql.Open("postgres", cfg.ConnectionString)
 	if err != nil {
 		panic(err)

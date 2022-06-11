@@ -7,27 +7,27 @@ import (
 )
 
 type errorResponseBody struct {
-	code    int
-	message string
+	Code    int    `json:"code"`
+	Message string `json:"message"`
 }
 
 func BadRequest(r iris.Request, body string) iris.Response {
 	return r.ResponseWithCode(&errorResponseBody{
-		code:    http.StatusBadRequest,
-		message: body,
+		Code:    http.StatusBadRequest,
+		Message: body,
 	}, http.StatusBadRequest)
 }
 
 func Internal(r iris.Request, body string) iris.Response {
 	return r.ResponseWithCode(&errorResponseBody{
-		code:    http.StatusInternalServerError,
-		message: body,
+		Code:    http.StatusInternalServerError,
+		Message: body,
 	}, http.StatusInternalServerError)
 }
 
 func Unauthorized(r iris.Request, body string) iris.Response {
 	return r.ResponseWithCode(&errorResponseBody{
-		code:    http.StatusUnauthorized,
-		message: body,
+		Code:    http.StatusUnauthorized,
+		Message: body,
 	}, http.StatusUnauthorized)
 }

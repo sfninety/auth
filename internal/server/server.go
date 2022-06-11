@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/sfninety/auth/internal/handler"
 	"github.com/sfninety/iris"
 )
 
@@ -17,6 +18,8 @@ var (
 
 func Init() {
 	router := iris.Router{}
+
+	handler.Init(&router)
 
 	fmt.Println(router.Describe())
 
@@ -29,7 +32,7 @@ func Run() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("listening on %v", srv.GetListener().Addr())
+	fmt.Printf("Listening on %v", srv.GetListener().Addr())
 
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)

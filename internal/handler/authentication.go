@@ -15,6 +15,26 @@ import (
 	"github.com/sfninety/iris"
 )
 
+type AuthenticationService interface {
+	// Register creates a new user and new verification process, and initiates a verification process.
+	// After calling register with a phone number, a user is created and a text message is sent to the phone number.
+	Register(iris.Request) iris.Response
+	// FinishRegistration accepts a password, hashes it, and declares a user registered.
+	FinishRegistration(r iris.Request) iris.Response
+
+	LoginWebAuthorize(r iris.Request) iris.Response
+
+	LoginWebQR(r iris.Request) iris.Response
+
+	LoginMobile(r iris.Request) iris.Response
+
+	Logout(r iris.Request) iris.Response
+
+	Refresh(r iris.Request) iris.Response
+
+	Authenticate(r iris.Request) iris.Response
+}
+
 var (
 	errInvalidPhoneNumber = errors.New("invalid phone number")
 	errUserAlreadyExists  = errors.New("user already exists")
@@ -44,9 +64,9 @@ func Register(r iris.Request) iris.Response {
 	req := &api.PhoneNumberRequest{}
 	err := r.Decode(req)
 	if err != nil || req.PhoneNumber == "" {
+		log.Printf("invalid request: %v", err.Error())
 		return httperrors.BadRequest(r, "invalid request")
 	}
-
 	phoneNumber, err := parsePhoneNumber(req.PhoneNumber)
 	if err != nil {
 		return httperrors.BadRequest(r, err.Error())
@@ -57,7 +77,8 @@ func Register(r iris.Request) iris.Response {
 	_, err = datastore.Users.GetUser(ctx, phoneNumber)
 	switch err {
 	case sql.ErrNoRows:
-		_, err = datastore.Users.NewUser(ctx, phoneNumber, "", "")
+		log.Println("creating new user")
+		err = datastore.Users.NewUser(ctx, phoneNumber, "", "")
 		if err != nil {
 			log.Printf("failed to create new user: %v", err.Error())
 			return httperrors.Internal(r, err.Error())
@@ -70,7 +91,7 @@ func Register(r iris.Request) iris.Response {
 	}
 
 	otp := cryptography.GenerateOTP(6)
-	_, err = datastore.Verifications.StoreVerificationPair(ctx, phoneNumber, otp)
+	err = datastore.Verifications.StoreVerificationPair(ctx, phoneNumber, otp)
 
 	// TODO handle duplicates
 	if err != nil {
@@ -105,6 +126,7 @@ func FinishRegistration(r iris.Request) iris.Response {
 	case sql.ErrNoRows:
 		return httperrors.BadRequest(r, "no user associated with phone number")
 	default:
+		log.Printf("failed to query for existing user: %v", err.Error())
 		return httperrors.Internal(r, "failed to get user")
 	}
 
@@ -123,16 +145,21 @@ func FinishRegistration(r iris.Request) iris.Response {
 		user.DeviceIdentifier = req.DeviceIdentifier
 		user.Onboarded = true
 
-		err = datastore.Users.UpdateUser(ctx, user)
+		err = datastore.Users.OnboardUser(ctx, user.DeviceIdentifier, user.PasswordHash, user.PhoneNumber)
 		if err != nil {
-			return httperrors.Internal(r, "failed to update user")
+			return httperrors.Internal(r, "failed to onboard user")
 		}
 	}
 
-	atp, err := authentication.GenerateJwtPair(ctx, cfg.JwtSigningKey, user.DeviceIdentifier, user.PhoneNumber)
+	atp, err := authentication.GenerateJwtPair(ctx, cfg.Handler.JwtSigningKey, user.DeviceIdentifier, user.PhoneNumber)
 	if err != nil {
+		log.Printf("failed to generate jwt pair: %v", err.Error())
 		return httperrors.Internal(r, "failed to create access pair")
 	}
 
 	return r.ResponseWithCode(atp.API(), 200)
+}
+
+func LoginMobile(req iris.Request) iris.Response {
+	return req.Response(nil)
 }

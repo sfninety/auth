@@ -3,6 +3,7 @@ package handler
 import (
 	"database/sql"
 	"log"
+	"time"
 
 	"github.com/sfninety/auth/ex/api"
 	"github.com/sfninety/auth/internal/cryptography"
@@ -31,7 +32,7 @@ func RequestNewOTP(r iris.Request) iris.Response {
 	_, err = datastore.Verifications.RetrieveVerificationPair(ctx, phoneNumber)
 	switch err {
 	case sql.ErrNoRows:
-		_, err = datastore.Verifications.StoreVerificationPair(ctx, phoneNumber, otp)
+		err = datastore.Verifications.StoreVerificationPair(ctx, phoneNumber, otp)
 		if err != nil {
 			log.Printf("failed to create new otp: %v", err.Error())
 			return httperrors.Internal(r, "failed to create new otp")
@@ -52,6 +53,7 @@ func RequestNewOTP(r iris.Request) iris.Response {
 	}
 
 	// TODO send message to notification server to send OTP text
+	log.Printf("\n #################### \n otp: %v \n phone number: %v \n ####################", otp, phoneNumber)
 
 	return r.ResponseWithCode(nil, 200)
 }
@@ -83,6 +85,10 @@ func VerifyOTP(r iris.Request) iris.Response {
 
 	if v.OTP != req.Otp {
 		return httperrors.Unauthorized(r, "otp does not match")
+	}
+
+	if time.Now().Unix() > v.Exp.Unix() {
+		return httperrors.Unauthorized(r, "otp has expired")
 	}
 
 	err = datastore.Users.VerifyUser(ctx, phoneNumber)

@@ -1,0 +1,62 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+
+env: 
+  DB_STRING: postgresql://service:${{ secrets.DB_KEY }}@free-tier7.aws-eu-west-1.cockroachlabs.cloud:26257/auth?sslmode=verify-full&options=--cluster%3Dsf90-cluster-2393
+  MIGRATION_DB_STRING: cockroachdb://service:${{ secrets.DB_KEY }}@free-tier7.aws-eu-west-1.cockroachlabs.cloud:26257/auth?sslmode=verify-full&options=--cluster%3Dsf90-cluster-2393
+
+
+jobs:
+
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Login to registry
+      uses: Azure/docker-login@v1
+      with:
+        # Container registry username
+        username: sf90registry
+        password: ${{ secrets.REGISTRY_KEY }}
+        login-server: sf90registry.azurecr.io
+
+    - uses: actions/checkout@v3
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+
+    - name: Git authentication
+      run: git config --global url."https://${{ secrets.AUTH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
+
+    - name: Prune images
+      run: >
+        docker image prune -a --force
+
+      # Make the jwt_signing_key a template
+    - name: Build the Docker image
+      run: >
+        docker build --no-cache . --file ./docker/Dockerfile --tag auth:latest --build-arg auth_token=${{ secrets.AUTH_TOKEN }} --build-arg db_connection_string='${{ env.DB_STRING }}' --build-arg db_cert=${{ env.DB_CERT }} --build-arg jwt_signing_key=verysecurekey
+
+    - name: Tag the image
+      run: docker tag auth:latest sf90registry.azurecr.io/services/auth
+
+    - name: Push the image to the repository
+      run: docker push sf90registry.azurecr.io/services/auth
+
+    - name: Get certs 
+      run: curl --create-dirs -o $HOME/.postgresql/root.crt -O https://cockroachlabs.cloud/clusters/${{ secrets.DB_CERT }}/cert
+
+    - name: Migrations
+      run: docker run -v $PWD/migrations:/migrations --network host migrate/migrate -path=/migrations/ -database '${{ env.MIGRATION_DB_STRING }}' up

@@ -22,3 +22,7 @@ message AccessPairResponse {
     string access_token = 1;
     string refresh_token = 2;
 }
+
+message AuthenticateRequest {
+    string access_token = 1;
+}
