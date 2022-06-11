@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: auth
-        image: sf90registry.azurecr.io/services/auth:latest
+        image: sf90registry.azurecr.io/services/auth:CONTAINERVERSION
         resources:
           limits:
             memory: "128Mi"
