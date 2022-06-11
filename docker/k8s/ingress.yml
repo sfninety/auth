@@ -6,13 +6,11 @@ metadata:
     name: auth-svc-ingress
 spec:
   rules:
-    - host: 071cb17d455f4048917f.eastus2.aksapp.io
+    - host: auth-svc-ingress.071cb17d455f4048917f.eastus2.aksapp.io
       http:
         paths:
         - path: "/"
           pathType: Prefix
           backend:
-            service:
-              name: auth-svc
-              port: 
-                number: 80
+            serviceName: auth-svc
+            port: http
