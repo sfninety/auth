@@ -70,17 +70,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: set target to aks
     - uses: azure/aks-set-context@v1
       with: 
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
         cluster-name: ${{ env.CLUSTER_NAME }}
         resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
 
-    - name: set namespace
     - run: kubectl create namespace ${{ env.NAMESPACE }} --dry-run=client -o json | kubectl apply -f -
     
-    - name: login to registry
       uses: Azure/docker-login@v1
       with:
         # Container registry username
@@ -88,14 +85,12 @@ jobs:
         password: ${{ secrets.REGISTRY_KEY }}
         login-server: sf90registry.azurecr.io
 
-    - name: create pull secret
     - uses: azure/k8s-create-secret@v1
       with:
         secret-name: ${{ secrets.AUTH_TOKEN }}
         namespace: ${{ env.NAMESPACE }}
         arguments: --force true
 
-    - name: deploy
     - uses: azure/k8s-deploy@v1
       with:
         manifests: |
