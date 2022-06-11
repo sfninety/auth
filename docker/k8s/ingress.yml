@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: auth-svc-ingress
+  labels:
+    name: auth-svc-ingress
+spec:
+  rules:
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: auth-svc
+            port: 
+              number: 80

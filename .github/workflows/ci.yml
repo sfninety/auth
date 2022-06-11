@@ -102,6 +102,7 @@ jobs:
         manifests: |
           ./docker/k8s/depl.yml
           ./docker/k8s/svc.yml
+          ./docker/k8s/ingress.yml
         images: |
           sf90registry.azurecr.io/auth:${{ github.sha }}
         imagepullsecrets: |
