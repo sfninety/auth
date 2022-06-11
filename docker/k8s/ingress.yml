@@ -6,7 +6,8 @@ metadata:
     name: auth-svc-ingress
 spec:
   rules:
-    - http:
+    - host: 071cb17d455f4048917f.eastus2.aksapp.io
+      http:
         paths:
         - path: "/"
           pathType: Prefix
