@@ -95,7 +95,7 @@ jobs:
         container-registry-username: sf90registry
         container-registry-password: ${{ secrets.REGISTRY_KEY }}
 
-    - run: sed -ri '' -e "s#CONTAINERVERSION#${{ github.sha }}#" ./docker/k8s/depl.yml
+    - run: sed -ri "s#CONTAINERVERSION#${{ github.sha }}#" ./docker/k8s/depl.yml
 
     - uses: azure/k8s-deploy@v1
       with:
