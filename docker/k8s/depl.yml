@@ -4,7 +4,6 @@ metadata:
   name: auth
   namespace: dev1
 spec:
-  imagePullPolicy: Always
   selector:
     matchLabels:
       app: auth
@@ -14,6 +13,7 @@ spec:
       labels:
         app: auth
     spec:
+      imagePullPolicy: Always
       containers:
       - name: auth
         image: sf90registry.azurecr.io/services/auth:CONTAINERVERSION
