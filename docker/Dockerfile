@@ -50,7 +50,7 @@ RUN sed -ri "s#dbtemplate#'${db_connection_string}'#" /etc/config.yaml
 RUN sed -ri "s#jwtsigningkeytemplate#'${jwt_signing_key}'#" /etc/config.yaml
 
 # Build
-RUN GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /go/bin/service
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="-w -s" -o /go/bin/service
 
 FROM scratch
 
