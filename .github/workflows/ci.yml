@@ -70,6 +70,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+    
+    - name: Checkout repository content
+      uses: actions/checkout@v2
 
     - uses: azure/aks-set-context@v1
       with: 
@@ -99,8 +102,8 @@ jobs:
     - uses: azure/k8s-deploy@v1
       with:
         manifests: |
-          ${{ github.workspace }}/docker/k8s/depl.yml
-          ${{ github.workspace }}/docker/k8s/svc.yml
+          ./docker/k8s/depl.yml
+          ./docker/k8s/svc.yml
         images: |
           ${{ env.REGISTRY_NAME }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
         imagepullsecrets: |
